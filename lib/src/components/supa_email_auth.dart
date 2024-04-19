@@ -83,6 +83,13 @@ class SupaEmailAuth extends StatefulWidget {
   /// Localization for the form
   final SupaEmailAuthLocalization localization;
 
+  /// Additional widgets to show in the footer of the form
+  final List<Widget> customFooterWidgets;
+
+  /// Whether to show the toggle sign in button
+  /// This is useful when you want to hide the toggle sign in button
+  final bool showToggleSignInButton;
+
   /// {@macro supa_email_auth}
   const SupaEmailAuth({
     Key? key,
@@ -94,6 +101,8 @@ class SupaEmailAuth extends StatefulWidget {
     this.metadataFields,
     this.extraMetadata,
     this.localization = const SupaEmailAuthLocalization(),
+    this.customFooterWidgets = const [],
+    this.showToggleSignInButton = true,
   }) : super(key: key);
 
   @override
@@ -256,19 +265,22 @@ class _SupaEmailAuthState extends State<SupaEmailAuth> {
                 child: Text(localization.forgotPassword),
               ),
             ],
-            TextButton(
-              key: const ValueKey('toggleSignInButton'),
-              onPressed: () {
-                setState(() {
-                  _forgotPassword = false;
-                  _isSigningIn = !_isSigningIn;
-                });
-              },
-              child: Text(_isSigningIn
-                  ? localization.dontHaveAccount
-                  : localization.haveAccount),
-            ),
+            if (widget.showToggleSignInButton)
+              TextButton(
+                key: const ValueKey('toggleSignInButton'),
+                onPressed: () {
+                  setState(() {
+                    _forgotPassword = false;
+                    _isSigningIn = !_isSigningIn;
+                  });
+                },
+                child: Text(_isSigningIn
+                    ? localization.dontHaveAccount
+                    : localization.haveAccount),
+              ),
           ],
+          if (_isSigningIn && widget.customFooterWidgets.isNotEmpty)
+            ...widget.customFooterWidgets,
           if (_isSigningIn && _forgotPassword) ...[
             spacer(16),
             ElevatedButton(
