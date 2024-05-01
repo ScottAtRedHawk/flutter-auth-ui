@@ -83,9 +83,6 @@ class SupaEmailAuth extends StatefulWidget {
   /// Localization for the form
   final SupaEmailAuthLocalization localization;
 
-  /// Additional widgets to show in the footer of the form
-  final List<Widget> customFooterWidgets;
-
   /// Whether to show the toggle sign in button
   /// This is useful when you want to hide the toggle sign in button
   final bool showToggleSignInButton;
@@ -101,7 +98,6 @@ class SupaEmailAuth extends StatefulWidget {
     this.metadataFields,
     this.extraMetadata,
     this.localization = const SupaEmailAuthLocalization(),
-    this.customFooterWidgets = const [],
     this.showToggleSignInButton = true,
   }) : super(key: key);
 
@@ -279,8 +275,6 @@ class _SupaEmailAuthState extends State<SupaEmailAuth> {
                     : localization.haveAccount),
               ),
           ],
-          if (_isSigningIn && widget.customFooterWidgets.isNotEmpty)
-            ...widget.customFooterWidgets,
           if (_isSigningIn && _forgotPassword) ...[
             spacer(16),
             ElevatedButton(
@@ -314,7 +308,6 @@ class _SupaEmailAuthState extends State<SupaEmailAuth> {
               child: Text(localization.backToSignIn),
             ),
           ],
-          spacer(16),
         ],
       ),
     );
