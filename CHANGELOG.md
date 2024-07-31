@@ -1,3 +1,17 @@
+## 0.5.0
+
+- feat: Allow password recovery email to be redirected to other URL [#98](https://github.com/supabase-community/flutter-auth-ui/pull/98)
+- feat: Add callback for internal state of `SupaEmailAuth` [#99](https://github.com/supabase-community/flutter-auth-ui/pull/99)
+- feat!: Upgrade anonymous users to regular users automatically [#100](https://github.com/supabase-community/flutter-auth-ui/pull/100)
+- feat!: Allow the OAuth provider labels to be overridden on `SupaSocialsAuth` [#101](https://github.com/supabase-community/flutter-auth-ui/pull/101)
+
+## 0.4.4
+
+- feat: Update minimum supabase_flutter version to v2.3.4
+- fix: Add redirectTo for email password reset [#83](https://github.com/supabase-community/flutter-auth-ui/pull/83)
+- feat: Add TextInputAction to phone and email sign in [#82](https://github.com/supabase-community/flutter-auth-ui/pull/82)
+- fix: Fix autofill not opening when tapping on email field in SupaEmailAuth [#80](https://github.com/supabase-community/flutter-auth-ui/pull/80)
+
 ## 0.4.3
 
 - feat: Add localization / text customization support for all components.

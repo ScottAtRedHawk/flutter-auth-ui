@@ -18,12 +18,12 @@ class SupaResetPassword extends StatefulWidget {
   final SupaResetPasswordLocalization localization;
 
   const SupaResetPassword({
-    Key? key,
+    super.key,
     this.accessToken,
     required this.onSuccess,
     this.onError,
     this.localization = const SupaResetPasswordLocalization(),
-  }) : super(key: key);
+  });
 
   @override
   State<SupaResetPassword> createState() => _SupaResetPasswordState();
@@ -78,6 +78,9 @@ class _SupaResetPasswordState extends State<SupaResetPassword> {
                   ),
                 );
                 widget.onSuccess.call(response);
+                // FIX use_build_context_synchronously
+                if (!context.mounted) return;
+                context.showSnackBar(localization.passwordResetSent);
               } on AuthException catch (error) {
                 if (widget.onError == null && context.mounted) {
                   context.showErrorSnackBar(error.message);

@@ -54,7 +54,8 @@ extension on OAuthProvider {
         _ => Colors.black,
       };
 
-  String get capitalizedName => name[0].toUpperCase() + name.substring(1);
+  String get labelText =>
+      'Continue with ${name[0].toUpperCase()}${name.substring(1)}';
 }
 
 enum SocialButtonVariant {
@@ -125,7 +126,7 @@ class SupaSocialsAuth extends StatefulWidget {
   final SupaSocialsAuthLocalization localization;
 
   const SupaSocialsAuth({
-    Key? key,
+    super.key,
     this.nativeGoogleAuthConfig,
     this.enableNativeAppleAuth = true,
     required this.socialProviders,
@@ -138,7 +139,7 @@ class SupaSocialsAuth extends StatefulWidget {
     this.scopes,
     this.queryParams,
     this.localization = const SupaSocialsAuthLocalization(),
-  }) : super(key: key);
+  });
 
   @override
   State<SupaSocialsAuth> createState() => _SupaSocialsAuthState();
@@ -337,6 +338,17 @@ class _SupaSocialsAuthState extends State<SupaSocialsAuth> {
               }
             }
 
+            final user = supabase.auth.currentUser;
+            if (user?.isAnonymous == true) {
+              await supabase.auth.linkIdentity(
+                socialProvider,
+                redirectTo: widget.redirectUrl,
+                scopes: widget.scopes?[socialProvider],
+                queryParams: widget.queryParams?[socialProvider],
+              );
+              return;
+            }
+
             await supabase.auth.signInWithOAuth(
               socialProvider,
               redirectTo: widget.redirectUrl,
@@ -360,10 +372,10 @@ class _SupaSocialsAuthState extends State<SupaSocialsAuth> {
         }
 
         final authButtonStyle = ButtonStyle(
-          foregroundColor: MaterialStateProperty.all(foregroundColor),
-          backgroundColor: MaterialStateProperty.all(backgroundColor),
-          overlayColor: MaterialStateProperty.all(overlayColor),
-          iconColor: MaterialStateProperty.all(iconColor),
+          foregroundColor: WidgetStateProperty.all(foregroundColor),
+          backgroundColor: WidgetStateProperty.all(backgroundColor),
+          overlayColor: WidgetStateProperty.all(overlayColor),
+          iconColor: WidgetStateProperty.all(iconColor),
         );
 
         return Padding(
@@ -384,7 +396,9 @@ class _SupaSocialsAuthState extends State<SupaSocialsAuth> {
                   style: authButtonStyle,
                   onPressed: onAuthButtonPressed,
                   label: Text(
-                      '${localization.continueWith} ${socialProvider.capitalizedName}'),
+                    localization.oAuthButtonLabels[socialProvider] ??
+                        socialProvider.labelText,
+                  ),
                 ),
         );
       },
